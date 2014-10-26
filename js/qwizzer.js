@@ -22,7 +22,7 @@
             });
 
             $(this).scroll(function(evt) {
-                //console.log($(this).scrollTop());
+                //console.log($(this).scrollTop());//
                 //console.log(scrollLimit);
                 if($(window).scrollTop() >= scrollLimit){
                     $(window).scrollTop(scrollLimit);
