@@ -48,7 +48,7 @@
 
                     //console.log(answer);
 
-                    if(answer === correctAnswer)
+                    if(checkIfCorrectAnswer(answer,correctAnswer))
                     {
                         //  console.log("You answered correct!");
                         correct++;
@@ -60,14 +60,25 @@
                         alert("Wrong answer!");
                     }
 
-
                     evt.preventDefault();
                 });
             });
 
-
         });
 
+        function checkIfCorrectAnswer(guess,answer){
+            answers = answer.split(":::");
+            return isInArray(guess,answers);
+        }
+
+        function isInArray(val,arr){
+            var i = 0;
+            for(;i < arr.length;i++){
+               if (arr[i].toLowerCase().trim() === val.toLowerCase().trim())
+                return true;
+            }
+            return false;
+        }
 
         function calcNewScrollLimit(){
             $('.qwizzer').each(function(index) {
