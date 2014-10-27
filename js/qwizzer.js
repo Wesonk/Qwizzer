@@ -15,6 +15,7 @@
 
             correct = options.correct;
             scrollLimit = 2000000000000000000;
+
             init();
 
             $(this).resize(function(){
@@ -22,7 +23,7 @@
             });
 
             $(this).scroll(function(evt) {
-                //console.log($(this).scrollTop());//
+                //console.log($(this).scrollTop());
                 //console.log(scrollLimit);
                 if($(window).scrollTop() >= scrollLimit){
                     $(window).scrollTop(scrollLimit);
@@ -33,21 +34,32 @@
 
                 $(this).submit(function(evt){
 
-                    var answer = "";
+                    var answer = [],choices = [];
                     var correctAnswer = $(this).children().contents().filter('input[type="hidden"]').val();
-
                     //console.log($(this).children().contents());
-
                     //console.log(correctAnswer);
 
+                    // ## Gets the values from the input fields and puts them in answer array
+                    // Looks for radio, text and checkbox input fields and collects the input data
                     if($(this).children().contents().filter("input[type=radio]:checked").length)
-                        answer = $(this).children().contents().filter("input[type=radio]:checked").eq(0).val();
+                        answer.push($(this).children().contents().filter("input[type=radio]:checked").eq(0).val());
 
                     else if ($(this).children().contents().filter("input[type=text]").length === 1)
-                        answer = $(this).children().contents().filter("input[type=text]").eq(0).val();
+                        answer.push($(this).children().contents().filter("input[type=text]").eq(0).val());
 
+                    else if ($(this).children().contents().filter("input[type=checkbox]:checked").length)
+                    {
+                        console.log("checkboxes!");
+                        var checkedBoxes = $(this).children().contents().filter("input[type=checkbox]:checked");
+                        var index =  0;
+                        for(;index < checkedBoxes.length;index++)
+                        {
+                            answer.push(checkedBoxes.eq(index).val());
+                        }
+                    }
+
+                    // ## Checks if the answer is correct
                     //console.log(answer);
-
                     if(checkIfCorrectAnswer(answer,correctAnswer))
                     {
                         //  console.log("You answered correct!");
@@ -59,16 +71,25 @@
                     }else{
                         alert("Wrong answer!");
                     }
-
                     evt.preventDefault();
                 });
             });
-
         });
 
         function checkIfCorrectAnswer(guess,answer){
-            answers = answer.split(":::");
-            return isInArray(guess,answers);
+            var index = 0,
+                correct = 0,
+                correctAnswers = answer.split(";;;"),
+                answers = [];
+            for(;index < guess.length && index < correctAnswers.length;index++)
+            {
+                answers = correctAnswers[index].split(":::");
+                if(isInArray(guess[index],answers))
+                    correct++;
+                else
+                    return false;
+            }
+            return correct === correctAnswers.length && guess.length === correctAnswers.length;
         }
 
         function isInArray(val,arr){
@@ -83,7 +104,12 @@
         function calcNewScrollLimit(){
             $('.qwizzer').each(function(index) {
                 if(correct <= index) {
-                    scrollLimit = $(this).prev().offset().top + $(this).prev().height() + $(this).height() - $(window).height();
+                    var prevElemExcludingQwizzer = $(this).prevAll().not(".qwizzer").first();
+                    scrollLimit = prevElemExcludingQwizzer.offset().top
+                        + prevElemExcludingQwizzer.height()
+                        + $(this).height()
+                        - $(window).height();
+
                     return false;
                 }
             });
