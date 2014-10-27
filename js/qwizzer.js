@@ -59,6 +59,7 @@
                     }
 
                     // ## Checks if the answer is correct
+                    //console.log(answer);
                     if(checkIfCorrectAnswer(answer,correctAnswer))
                     {
                         //  console.log("You answered correct!");
@@ -100,6 +101,7 @@
             return false;
         }
 
+        // calculates how far the user will able to scroll
         function calcNewScrollLimit(){
             $('.qwizzer').each(function(index) {
                 if(correct <= index) {
@@ -116,6 +118,13 @@
 
         function showQuestion(){
             $('.qwizzer').eq(correct).fadeIn(options.duration);
+            calcNewBottomPadding();
+        }
+
+        // Calculates and implements how much padding it takes to fill the rest of the screen
+        function calcNewBottomPadding(){
+            var scrollPadding = $(document).height() - (scrollLimit+ $(this).height());
+            $('.qwizzer').eq(correct).css('padding-bottom',scrollPadding+"px");
         }
 
         function hideQuestions(){
