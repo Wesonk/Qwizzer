@@ -59,7 +59,6 @@
                     }
 
                     // ## Checks if the answer is correct
-                    //console.log(answer);
                     if(checkIfCorrectAnswer(answer,correctAnswer))
                     {
                         //  console.log("You answered correct!");

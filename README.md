@@ -77,5 +77,5 @@ In case of a checkbox quiz with multiple selections you'll need so separate the 
 
 duration: Controls the amount of time in which the animations will animate. Can either be slow or fast.
 
-correct: Can be used to skip a number of challenges. Must be a non-negative number.
+correct: Can be used to skip a number of challenges. Must be a non-negative number. 
 
